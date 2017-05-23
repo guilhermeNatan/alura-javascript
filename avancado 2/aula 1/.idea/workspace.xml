@@ -112,7 +112,7 @@
     <handled-path value="$PROJECT_DIR$/aluraframe/server/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1302" />
+    <option name="x" value="1430" />
     <option name="y" value="-11" />
     <option name="width" value="1303" />
     <option name="height" value="780" />
@@ -766,15 +766,15 @@
       <workItem from="1493563289225" duration="8075000" />
       <workItem from="1493861895497" duration="54000" />
       <workItem from="1493941472832" duration="2049000" />
-      <workItem from="1495495536532" duration="3893000" />
+      <workItem from="1495495536532" duration="4161000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14071000" />
+    <option name="totallyTimeSpent" value="14339000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1302" y="-11" width="1303" height="780" extended-state="6" />
+    <frame x="1430" y="-11" width="1303" height="780" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
