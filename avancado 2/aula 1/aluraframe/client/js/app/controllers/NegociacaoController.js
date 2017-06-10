@@ -6,56 +6,50 @@ class NegociacaoController {
         this._inputData = $('#data');
         this._inputQuantidade = $('#quantidade');
         this._inputValor = $('#valor');
-        // this._listaNegociacoes = new ListaNegociacoes(
-        //      model => this._negociacoesView.update(model));
-
-        let self = this;
-        this._listaNegociacoes = new Proxy(new ListaNegociacoes(),{
-
-           get: function (target,prop, receiver) {
-
-               if(['adiciona', 'esvazia'].includes(prop) && typeof(target[prop])==typeof (Function))
-               {
-                   // função , o objeto que será usado como this, e os argumentos da função
-                return function()
-                {
-                    Reflect.apply(target[prop],target, arguments);
-                    self._negociacoesView.update(target);
-                }
-
-
-               }
-
-               return Reflect.get(target,prop, receiver);
-           }
-        });
-
-
-        
-
-
-
-
-
-
         this._negociacoesView = new NegociacoesView($('#negociacoesView'));
-        this._negociacoesView.update(this._listaNegociacoes);
-        
-        this._mensagem = new Mensagem();
+        this._listaNegociacoes = new Bind(new ListaNegociacoes(),this._negociacoesView,
+        'adiciona','esvazia', 'ordena', 'inverteOrdem');
         this._mensagemView = new MensagemView($('#mensagemView'));
-        this._mensagemView.update(this._mensagem);
-        
+        this._mensagem = new Bind(new Mensagem(), this._mensagemView,'texto');
+
+        this._ordemAtual='';
     }
-    
+
+    importarNegociacoes()
+    {
+        let negociacaoService = new NegociacaoService();
+
+        negociacaoService.obterNegociacoes()
+            .then(negociacoes => {
+                negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
+                this._mensagem.texto = "Negociações adicionada com sucesso!";
+        })
+            .catch(erro => this._mensagem.texto = erro);
+    }
+
+    ordena(coluna)
+    {
+        if(this._ordemAtual == coluna)
+        {
+            this._listaNegociacoes.inverteOrdem();
+        }
+        else {
+            this._listaNegociacoes.ordena((a,b)=> a[coluna] - b[coluna]);
+        }
+        this._ordemAtual = coluna;
+    }
     adiciona(event) {
         
         event.preventDefault();
-        this._listaNegociacoes.adiciona(this._criaNegociacao());
+        try{
 
-        this._mensagem.texto = 'Negociação adicionada com sucesso';
-        this._mensagemView.update(this._mensagem);
-        
-        this._limpaFormulario();   
+            this._listaNegociacoes.adiciona(this._criaNegociacao());
+            this._mensagem.texto = 'Negociação adicionada com sucesso';
+            this._limpaFormulario();
+        }catch (erro)
+        {
+            this._mensagem.texto = erro
+        }
     }
     
     _criaNegociacao() {
@@ -77,9 +71,6 @@ class NegociacaoController {
     apaga()
     {
         this._listaNegociacoes.esvazia();
-
         this._mensagem.texto = 'Negociações excluídas com sucesso.';
-        this._mensagemView.update(this._mensagem);
-
     }
 }
